@@ -23,6 +23,5 @@ jobs:
 
       # Install and run lint
       - run: |
-          sed -i "s/CI_COMMIT_TAG/0.1.0/" manifest.json
-          npm install --global web-ext
-          web-ext lint --self-hosted --warnings-as-errors --ignore-files "info/*"
+          npm install eslint --save-dev
+          npx eslint . --ext .js,.jsx
