@@ -41,7 +41,6 @@ function createTableFromJSON(arr) {
     var metaTag = document.querySelector('meta[property="og:url"]');
     if (metaTag) {
       var tab_url = metaTag.content;
-      var tab_url = document.querySelector('meta[property="og:url"]').content;
       if (tab_url) {
         var match = tab_url.match("^https://gitlab([.a-z-]+)/(.*?)(?:/-)?/pipelines/([0-9]+)$");
         if (match) {
