@@ -38,23 +38,29 @@ function createTableFromJSON(arr) {
   }
   
   function checkTab() {
-    var tab_url = document.querySelector('meta[property="og:url"]').content;
-    if (tab_url) {
-      var match = tab_url.match("^https://gitlab([.a-z-]+)/(.*?)(?:/-)?/pipelines/([0-9]+)$");
-      if (match) {
-        // exit if the table has been injected previously
-        if (document.getElementById("gitlab-ext-variables")) { return; }
+    var metaTag = document.querySelector('meta[property="og:url"]');
+    if (metaTag) {
+      var tab_url = metaTag.content;
+      if (tab_url) {
+        var match = tab_url.match("^https://gitlab([.a-z-]+)/(.*?)(?:/-)?/pipelines/([0-9]+)$");
+        if (match) {
+          // exit if the table has been injected previously
+          if (document.getElementById("gitlab-ext-variables")) { return; }
   
-        var host = match[1];
-        var repo = match[2];
-        var pipeline = match[3];
+          var host = match[1];
+          var repo = match[2];
+          var pipeline = match[3];
   
-        fetch("https://gitlab" + host + "/api/v4/projects/" + encodeURIComponent(repo) + "/pipelines/" + pipeline + "/variables")
-        .then(res => res.json())
-        .then(out => {
-          createTableFromJSON(out);
-        })
-        .catch(err => { console.error(err); });
+          var apiUrl = "https://gitlab" + host + "/api/v4/projects/" + encodeURIComponent(repo) + "/pipelines/" + pipeline + "/variables";
+          
+          chrome.runtime.sendMessage({ action: "fetchVariables", url: apiUrl }, response => {
+            if (response.success) {
+              createTableFromJSON(response.data);
+            } else {
+              console.error(response.error);
+            }
+          });
+        }
       }
     }
   }
