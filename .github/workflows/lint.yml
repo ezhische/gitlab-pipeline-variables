@@ -24,4 +24,5 @@ jobs:
       # Install and run lint
       - run: |
           npm install eslint --save-dev
+          npm install globals @eslint/js @eslint/eslintrc -D
           npx eslint .
