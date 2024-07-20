@@ -1,6 +1,5 @@
-import jsonPlugin from 'eslint-plugin-json';
+import json from 'eslint-plugin-json';
 import compatPlugin from 'eslint-plugin-compat';
-
 export default [
   {
     ignores: ['node_modules/**', 'dist/**'],
@@ -12,7 +11,7 @@ export default [
       sourceType: 'module',
     },
     plugins: {
-      json: jsonPlugin,
+      json: json,
       compat: compatPlugin,
     },
     rules: {
@@ -27,14 +26,11 @@ export default [
     },
   },
   {
-    files: ['manifest.json'],
-    plugins: {
-      json: jsonPlugin,
-    },
-    rules: {
-      'json/*': ['error', {
-        'allowComments': true,
-      }],
-    },
+        files: ["**/*.json"],
+        plugins: { json },
+        processor: "json/json",
+        rules: {
+          "json/*": ["error", {"allowComments": true}]
+        }
   },
 ];
