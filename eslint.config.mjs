@@ -1,30 +1,40 @@
-import chrome from "eslint-plugin-chrome";
-import globals from "globals";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import jsonPlugin from 'eslint-plugin-json';
+import compatPlugin from 'eslint-plugin-compat';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
-
-export default [...compat.extends("eslint:recommended", "plugin:chrome/recommended"), {
-    plugins: {
-        chrome,
-    },
-
+export default [
+  {
+    ignores: ['node_modules/**', 'dist/**'],
+  },
+  {
+    files: ['**/*.js'],
     languageOptions: {
-        globals: {
-            ...globals.browser,
-            ...globals.webextensions,
-        },
-
-        ecmaVersion: 12,
-        sourceType: "module",
+      ecmaVersion: 'latest',
+      sourceType: 'module',
     },
-}];
+    plugins: {
+      json: jsonPlugin,
+      compat: compatPlugin,
+    },
+    rules: {
+      'semi': ['error', 'always'],
+      'quotes': ['error', 'double'],
+      'indent': ['error', 2],
+      'no-trailing-spaces': 'error',
+      'eol-last': ['error', 'always'],
+      'no-unused-vars': 'warn',
+      'no-console': 'off',
+      'compat/compat': 'error',
+    },
+  },
+  {
+    files: ['manifest.json'],
+    plugins: {
+      json: jsonPlugin,
+    },
+    rules: {
+      'json/*': ['error', {
+        'allowComments': true,
+      }],
+    },
+  },
+];

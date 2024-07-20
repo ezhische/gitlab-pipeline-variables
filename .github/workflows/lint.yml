@@ -20,9 +20,11 @@ jobs:
 
       # Get nodejs env
       - uses: actions/setup-node@v4
+        with:
+         node-version: 20
 
       # Install and run lint
       - run: |
           npm install eslint --save-dev
-          npm install globals @eslint/js @eslint/eslintrc -D
+          npm install eslint-plugin-compat eslint-plugin-json
           npx eslint .
